@@ -8,11 +8,12 @@ __author__ = 'kurt'
 
 class  LedEffects(threading.Thread):
 
-    def __init__(self,header,ser,NUM_LEDS):
+    def __init__(self, header, effect_q, output_q, NUM_LEDS = 100):
         super(LedEffects, self).__init__()
         self._stop = threading.Event()
         self.header = header
-        self.ser = ser
+        self.effect_q = effect_q
+        self.output_q = output_q
         self.NUM_LEDS = NUM_LEDS
 
     """
@@ -57,9 +58,9 @@ class  LedEffects(threading.Thread):
     def chase(self, colour = c.Color(rgb=(1, 1, 1))):
         while not self._stop.isSet():
             for i in range(self.NUM_LEDS):
-                leds_list = [ c.Color("black") ] * self.NUM_LEDS
+                leds_list = [c.Color("black")] * self.NUM_LEDS
                 leds_list[i] = c.Color(rgb=(1, 1, 1))
-                self.ser.write(self.leds_list_to_byte(leds_list))
+                self.output_q.put(self.leds_list_to_byte(leds_list))
                 time.sleep(0.01)
 
 
