@@ -15,7 +15,7 @@ class  LedEffects:
 
 ###################
 #
-#           Utilities v
+#           Utilities
 #
 ###################
 
