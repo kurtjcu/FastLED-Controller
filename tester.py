@@ -29,11 +29,8 @@ ser = serial.Serial("COM4",115200)
 LedEff = LedEffects(header,ser,NUM_LEDS)
 
 
-LedEff.chase()
-print("sleeping now")
-time.sleep(10)
-print("stopping now")
-LedEff.stop()
+LedEff.chase(10, colour=c.Color("red"), offcolour=c.Color("black"))
+
 
 
 

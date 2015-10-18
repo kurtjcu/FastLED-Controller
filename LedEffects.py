@@ -6,30 +6,14 @@ __author__ = 'kurt'
 
 
 
-class  LedEffects(threading.Thread):
+class  LedEffects():
 
     def __init__(self,header,ser,NUM_LEDS):
-        super(LedEffects, self).__init__()
-        self._stop = threading.Event()
         self.header = header
         self.ser = ser
         self.NUM_LEDS = NUM_LEDS
 
-    """
-    Use this to stop thread
-    """
-    def stop(self):
-        self._stop.set()
 
-    def join(self, timeout=None):
-        self._stop.set()
-        super(LedEffects, self).join(timeout)
-
-    """
-    Use this to see if thread has stopped
-    """
-    def stopped(self):
-        return self._stop.isSet()
 
 
 ###################
@@ -54,11 +38,13 @@ class  LedEffects(threading.Thread):
 
 
 
-    def chase(self, colour = c.Color(rgb=(1, 1, 1))):
-        while not self._stop.isSet():
+    def chase(self,run_time, colour = c.Color(rgb=(1, 1, 1)), offcolour =c.Color("black")):
+
+        t_end = time.time() + run_time
+        while time.time() < t_end:
             for i in range(self.NUM_LEDS):
-                leds_list = [ c.Color("black") ] * self.NUM_LEDS
-                leds_list[i] = c.Color(rgb=(1, 1, 1))
+                leds_list = [ offcolour ] * self.NUM_LEDS
+                leds_list[i] = colour
                 self.ser.write(self.leds_list_to_byte(leds_list))
                 time.sleep(0.01)
 
