@@ -1,6 +1,7 @@
 import serial
 import time
 import colour as c
+import threading, queue
 from LedEffects import LedEffects
 
 __author__ = 'kurt'
@@ -21,21 +22,20 @@ for i in range(NUM_LEDS+1):
 
 blue = c.Color("blue")
 
+'''serial setup'''
 ser = serial.Serial("COM4",115200)
 
+'''initialize class'''
 LedEff = LedEffects(header,ser,NUM_LEDS)
 
 
 LedEff.chase()
+print("sleeping now")
+time.sleep(10)
+print("stopping now")
+LedEff.stop()
 
-'''
-while True:
-	for i in range(NUM_LEDS):
-		leds_list = [ c.Color("black") ] * NUM_LEDS
-		leds_list[i] = c.Color(rgb=(1, 1, 1))
-		ser.write(leds_list_to_byte())
-		time.sleep(0.01)
-'''
+
 
 #ser.write(leds_list_to_byte())
 
