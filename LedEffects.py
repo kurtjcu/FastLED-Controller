@@ -4,6 +4,7 @@ import random
 
 import colour as c
 
+
 #import color_utils
 
 __author__ = 'kurt'
@@ -100,6 +101,19 @@ class LedEffects():
             for i in range(self.NUM_LEDS):
                 leds_list = [offcolour] * self.NUM_LEDS
                 leds_list[i] = colour
+                leds_list[i-10] = colour
+                leds_list[i-20] = colour
+                self.ser.write(self.leds_list_to_byte(leds_list))
+                time.sleep(0.01)
+
+    def multi_chase(self, run_time, colour=c.Color(rgb=(1, 1, 1)), offcolour=c.Color("black"), num=5, num_offset=10):
+
+        t_end = time.time() + run_time
+        while time.time() < t_end:
+            for i in range(self.NUM_LEDS):
+                leds_list = [offcolour] * self.NUM_LEDS
+                for j in range(num):
+                    leds_list[i-(j*num_offset)] = colour
                 self.ser.write(self.leds_list_to_byte(leds_list))
                 time.sleep(0.01)
 

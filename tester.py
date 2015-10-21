@@ -29,7 +29,7 @@ ser = serial.Serial("COM4",115200)
 LedEff = LedEffects(header,ser,NUM_LEDS)
 
 
-LedEff.chase(10, colour=c.Color("red"), offcolour=c.Color("blue"))
+LedEff.multi_chase(10, colour=c.Color("red"), offcolour=c.Color("blue"), num=2, num_offset=10)
 
 
 
