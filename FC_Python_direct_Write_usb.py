@@ -1,5 +1,4 @@
-import usb.core
-import usb.util
+import serial
 import random
 import time
 import binascii
@@ -15,23 +14,25 @@ __author__ = 'kurt'
 # This example code is released into the public domain.
 #
 
+ser = serial.Serial("COM4",115200)
 
-
-dev = usb.core.find(idVendor=0x1d50, idProduct=0x607a)
+'''
+dev = serial.Serial("COM4",115200)
 if not dev:
     raise IOError("No Fadecandy interfaces found")
+'''
 
-dev.set_configuration()
+#dev.set_configuration()
 
-print("Serial number: %s" % usb.util.get_string(dev, 255, dev.iSerialNumber))
+print("Serial number: {}".format("Herro"))
 
 # Debug flags
 
 flags = 0x00
-dev.write(1, '\x80' + chr(flags) + ('\x00' * 62))
+#dev.write('\x80' + chr(flags) + ('\x00' * 62))
 
 # Set up a default color LUT
-
+'''
 lut = [0] * (64 * 25)
 for index in range(25):
     lut[index*64] = index | 0x40
@@ -42,16 +43,18 @@ for channel in range(3):
         i = channel * 257 + row
         packetNum = i / 31
         packetIndex = i % 31
-        #print("%d, %d = 0x%04x" % (channel, row, value))
-        lut[packetNum*64 + 2 + packetIndex*2] = value & 0xFF
-        lut[packetNum*64 + 3 + packetIndex*2] = value >> 8
+        print("%d, %d = 0x%04x" % (channel, row, value))
+        lut[int(packetNum*64 + 2 + packetIndex*2)] = value & 0xFF
+        lut[int(packetNum*64 + 3 + packetIndex*2)] = value >> 8
 lutPackets = ''.join(map(chr, lut))
-#print(binascii.b2a_hex(lutPackets))
-dev.write(1, lutPackets)
+print(binascii.b2a_hex(lutPackets.encode()))
+#dev.write(1, lutPackets)
 print("LUT programmed")
+'''
 
 # Slowly push random frames to the device
 
+print("beer now")
 while True:
 
     for index in range(25):
@@ -61,10 +64,24 @@ while True:
         else:
             control = index
 
-        data = chr(control) + ''.join(chr(random.choice([0, 255])) for i in range(63))
-        dev.write(1, data)
-        #print(binascii.b2a_hex(data))
+        data = bytes([control])
 
-    #print('')
-    raw_input()
+        for i in range(4):
+            print('----herro----')
+            data += bytes([random.choice([0, 255])])
+
+        print (len(data))
+        print(binascii.b2a_hex(data))
+        ser.write(data)
+
+        print(ser.readline())
+        #out = ""
+        #while ser.inWaiting() > 0:
+        #    print(ser.read())
+
+
+
+    print('ended')
+    #raw_input()
     #time.sleep(0.1)
+

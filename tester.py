@@ -6,9 +6,9 @@ from LedEffects import LedEffects
 
 __author__ = 'kurt'
 
-header = b"Ada"
+header = b"White"
 #header = "\x41\x64\x61"
-NUM_LEDS = 80
+NUM_LEDS = 220
 
 
 
@@ -29,7 +29,7 @@ ser = serial.Serial("COM4",115200)
 LedEff = LedEffects(header,ser,NUM_LEDS)
 
 
-LedEff.chase(10, colour=c.Color("red"), offcolour=c.Color("black"))
+LedEff.chase(10, colour=c.Color("red"), offcolour=c.Color("blue"))
 
 
 
